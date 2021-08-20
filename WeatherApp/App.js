@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import type {Node} from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, ScrollView, Text, Image, View, TouchableHighlight } from 'react-native';
 import Dialog from "react-native-dialog";
 import { Header, Card } from 'react-native-elements';
 import useAxios from 'axios-hooks';
@@ -8,11 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App: () => Node = () => {
 
-  useEffect(( => {
+  useEffect(() => {
     getData();
   },[]);
 
-  useEffect(( => {
+  useEffect(() => {
     storeData();
   },[cities]);
 
@@ -108,9 +108,9 @@ const App: () => Node = () => {
 
 
       return (
-        <Card>
-          <Card.Title>{city} {"\n"} {date}.{month}.{year} {hours}:{min}:{sec}</Card.Title>
-          <Text>Main: {data.weather[0].main}</Text>
+<Card>
+        <Card.Title>{city} {"\n"} {date}.{month}.{year} {hours}:{min}:{sec}</Card.Title>
+        <Text>Main: {data.weather[0].main}</Text>
         <View style={{flexDirection: "row"}}>
         <View>
         <Text>Temp: {data.main.temp} °C</Text>
@@ -131,29 +131,28 @@ const App: () => Node = () => {
           </View>
           </TouchableHighlight>
         </View>
-        </Card>
+      </Card>
       );
     }
 
   return (
-    <SafeAreaView>
+ <SafeAreaView>
      <Header
-      centerComponent={{ text: 'Weather App', style: { color: '#006400' } }}
-      rightComponent={{ icon: 'add', color: '#fff' }}
-    />
-      <Dialog.Container visible={modalVisible}>
+      centerComponent={{ text: 'Weather App', style: { color: '#fff' } }}
+      rightComponent={{ icon: 'add', color: '#fff', onPress: openDialog }}/>
+      <ScrollView>
+        {!modalVisible && cities.map(city => (
+        <WeatherForecast key={city.id} city={city.name} deleteCity={deleteCity}/>))}
+      </ScrollView>
+    <Dialog.Container visible={modalVisible}>
     <Dialog.Title>Add a new city</Dialog.Title>
-    <View>
-      <Input
-        onChangeText={ (text) => setCityName(text)}
-        placeholder='Type cityname here'
-      />
-    </View>
+    <Dialog.Input placeholder="Set city name here" onChangeText={ (text) => setCityName(text)}></Dialog.Input>
     <Dialog.Button label="Cancel" onPress={cancelCity} />
     <Dialog.Button label="Add" onPress={addCity} />
-  </Dialog.Container>
+    </Dialog.Container>
     </SafeAreaView>
   );
 };
+
 
 export default App;
