@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import type {Node} from 'react';
-import { StyleSheet, Text, SafeAreaView } from 'react-native';
-import { ScrollView, Image, View, TouchableHighlight } from 'react-native';
+import { SafeAreaView, ScrollView, Text, Image, View, TouchableHighlight} from 'react-native';
 import Dialog from "react-native-dialog";
-import { Header, Card } from 'react-native-elements';
+import { Header, Card} from 'react-native-elements';
 import useAxios from 'axios-hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,11 +10,11 @@ const App: () => Node = () => {
 
   useEffect(() => {
     getData();
-  },[]);
+  },[]);  
 
   useEffect(() => {
     storeData();
-  },[cities]);
+  },[cities]); 
 
   const [modalVisible, setModalVisible] = useState(false); 
   const [cityName, setCityName] = useState(""); 
@@ -35,82 +33,77 @@ const App: () => Node = () => {
     setModalVisible(false);
   }
 
+  
   const deleteCity = (deleteCity) => {
-    let filteredArray = cities.filter(city => city.name !== deleteCity);
-    setCities(filteredArray);
-    }
+  let filteredArray = cities.filter(city => city.name !== deleteCity);
+  setCities(filteredArray);
 
-    const storeData = async () => {
-      try {
-        await AsyncStorage.setItem('@cities', JSON.stringify(cities));
-      } catch (e) {
-        console.log("Cities saving error!");
-        alert("Cities saving error");
-      }
-    }
-  
-    const getData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('@cities')
-        if(value !== null) {
-          setCities(JSON.parse(value));
-        }
-      } catch(e) {
-        console.log("Cities loading error!");
-        alert("Cities loading error");
-  
-      }
-    }
-  
-
-    const WeatherForecast = (params) => {
-      const city = params.city;
-      const API_KEY = '232f0df72bf7d42296a4561ce6b3d4be';
-  const URL = 'https://api.openweathermap.org/data/2.5/weather?q=';
-
-  var date = new Date().getDate(); 
-  var month = new Date().getMonth() + 1; 
-  var year = new Date().getFullYear();
-  var hours = new Date().getHours(); 
-  var min = new Date().getMinutes();
-  var sec = new Date().getSeconds();
-
-
-  const [{ data, loading, error }, refetch] = useAxios(
-    URL+city.name+'&appid='+API_KEY+'&units=metric'
-  )
-
-  if (loading) return (
-    <Card>
-      <Card.Title>Loading....</Card.Title>
-    </Card>
-  )
-  if (error) return (
-    <Card>
-      <Card.Title>Error loading weather forecast!</Card.Title>
-    </Card>
-  )
-
-  const refreshForecast = () => {
-    refetch();
   }
 
-  const deleteCity = () => {
-    params.deleteCity(city);
+  const storeData = async () => {
+    try {
+      await AsyncStorage.setItem('@cities', JSON.stringify(cities));
+    } catch (e) {
+      console.log("Cities saving error!");
+      alert("Cities saving error");
+    }
   }
 
-  console.log(data);
-  let IMAGEPATH = 'http://openweathermap.org/img/wn/';
-  let iconCode = data.weather[0].icon;
-  let endpath = '@2x.png';
-  let imageurl = IMAGEPATH + iconCode + endpath;
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@cities')
+      if(value !== null) {
+        setCities(JSON.parse(value));
+      }
+    } catch(e) {
+      console.log("Cities loading error!");
+      alert("Cities loading error");
 
-  console.log(data);
+    }
+  }
 
+  const WeatherForecast = (params) => {
+    const city = params.city;
+    const API_KEY = '8ae4b5129387ca3cac4fbe6b2196be42';
+    const URL = 'https://api.openweathermap.org/data/2.5/weather?q=';
 
+    var date = new Date().getDate(); 
+    var month = new Date().getMonth() + 1; 
+    var year = new Date().getFullYear();
+    var hours = new Date().getHours(); 
+    var min = new Date().getMinutes();
+    var sec = new Date().getSeconds();
+  
+    const [{ data, loading, error }, refetch] = useAxios(
+      URL+city+'&appid='+API_KEY+'&units=metric'
+    )
+    if (loading) return (
+      <Card>
+        <Card.Title>Loading....</Card.Title>
+      </Card>
+    )
+    if (error) return (
+      <Card>
+        <Card.Title>Error loading weather forecast!</Card.Title>
+      </Card>
+    )
+    
+    const refreshForecast = () => {
+      refetch();
+    }
 
-      return (
-<Card>
+    const deleteCity = () => {
+      params.deleteCity(city);
+    }
+
+    console.log(data);
+    let IMAGEPATH = 'http://openweathermap.org/img/wn/';
+    let iconCode = data.weather[0].icon;
+    let endpath = '@2x.png';
+    let imageurl = IMAGEPATH + iconCode + endpath;
+
+    return (
+      <Card>
         <Card.Title>{city} {"\n"} {date}.{month}.{year} {hours}:{min}:{sec}</Card.Title>
         <Text>Main: {data.weather[0].main}</Text>
         <View style={{flexDirection: "row"}}>
@@ -134,11 +127,11 @@ const App: () => Node = () => {
           </TouchableHighlight>
         </View>
       </Card>
-      );
-    }
+    );
+  }
 
   return (
- <SafeAreaProvider>
+    <SafeAreaView>
      <Header
       centerComponent={{ text: 'Weather App', style: { color: '#fff' } }}
       rightComponent={{ icon: 'add', color: '#fff', onPress: openDialog }}/>
@@ -152,9 +145,8 @@ const App: () => Node = () => {
     <Dialog.Button label="Cancel" onPress={cancelCity} />
     <Dialog.Button label="Add" onPress={addCity} />
     </Dialog.Container>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
-
 
 export default App;
