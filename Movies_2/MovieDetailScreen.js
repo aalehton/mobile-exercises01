@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Text,
@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function MovieDetailScreen(props) {
-    const { route } = props;
+
+  const { route } = props;
   const { movie } = route.params; 
   let IMAGEPATH = 'http://image.tmdb.org/t/p/w500';
   let imageurl = IMAGEPATH + movie.backdrop_path;
@@ -22,34 +22,34 @@ export default function MovieDetailScreen(props) {
   const [videos, setVideos] = useState([]);
   const [infoText, setInfoText] = useState([]);
 
-useEffect(() => {
+   useEffect(() => {
     axios
-      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=576c3137cd1a3bf64cd1e012a692f2b4&append_to_response=videos')
+      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=26eb649409084b73e4ebe5cb3d57bdde&append_to_response=videos')
       .then(response => {
         console.log(response.data.genres);
         setGenre(response.data.genres);
       })
   }, [])
 
-useEffect(() => {
+  useEffect(() => {
     axios
-      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=576c3137cd1a3bf64cd1e012a692f2b4&append_to_response=videos')
+      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=26eb649409084b73e4ebe5cb3d57bdde&append_to_response=videos')
       .then(response => {
         console.log(response.data.videos.results);
-        setGenre(response.data.videos.results);
+        setVideos(response.data.videos.results);
       })
   }, [])
 
   useEffect(() => {
     axios
-      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=576c3137cd1a3bf64cd1e012a692f2b4&append_to_response=videos')
+      .get('https://api.themoviedb.org/3/movie/' + movie.id + '?api_key=26eb649409084b73e4ebe5cb3d57bdde&append_to_response=videos')
       .then(response => {
         console.log(response.data);
-        setGenre(response.data);
+        setInfoText(response.data);
       })
   }, [])
 
- if (genre.length === 0) {
+  if (genre.length === 0) {
     return(
       <View style={{flex: 1, padding: 20}}>
         <Text>Loading, please wait...</Text>
@@ -70,21 +70,22 @@ useEffect(() => {
       </View>
     )
   }
-let movieRefresh = genre.map(function(genre,index){
+  let movieRefresh = genre.map(function(genre,index){
     return (
       <View>
       <MovieListItemRefresh genre={genre} key={index}/>
       </View>
     )
   });
-let movieRefresh2 = videos.map(function(video,index){
+  let movieRefresh2 = videos.map(function(video,index){
     return (
       <View>
       <MovieListItemRefresh2 video={video} key={index}/>
       </View>
     )
   });
-function MovieListItemRefresh(props) {
+
+  function MovieListItemRefresh(props) {
     return (
       <View>
         <Text style={{paddingBottom:10, fontSize: 14}}>{props.genre.name}</Text>
@@ -93,7 +94,7 @@ function MovieListItemRefresh(props) {
   }
   function MovieListItemRefresh2(props) {
     return (
-      <TouchableHighlight onPress={_ => videoPressed(props.video.key)} underlayColor="green">
+      <TouchableHighlight onPress={_ => videoPressed(props.video.key)} underlayColor="lightgray">
         <Text style={{paddingBottom:10 , fontSize: 14, color: 'blue'}}>{props.video.name}</Text>
       </TouchableHighlight> 
     );
@@ -103,38 +104,39 @@ function MovieListItemRefresh(props) {
         'PlayMovie',
         { moviesKey: index});
       } 
-        return (
-<View>
-<ScrollView>
+
+  return (
+    <View>
+      <ScrollView>
       <Image source={{uri: imageurl}} style={styles.image}  />
       <View  style={{padding: 20}}>
       <Text style={styles.title}>{movie.title}</Text>
       <Text style={styles.text}>{movie.release_date}</Text>
       <Text style={styles.text}>{movie.overview}</Text>
-      <Text style={{ fontWeight: 'bold'}}>Genre:</Text>
+      <Text style={{fontWeight: "bold"}}>Genre:</Text>
       <Text>{movieRefresh}</Text>
-      <Text style={{ fontWeight: 'bold', fontSize: 16}}>{infoText.runtime}</Text>
+      <Text style={{fontWeight: "bold"}}>Runtime:</Text>
+      <Text style={{marginBottom:10, fontSize: 14}}>{infoText.runtime}</Text>
       <Text style={{fontWeight: "bold"}}>Homepage:</Text>
-       <Text style={{marginBottom:10}}>{infoText.homepage} </Text>
+      <Text style={{marginBottom:10}}>{infoText.homepage} </Text>
       <Text style={{fontWeight: "bold"}}>Videos:</Text>
       <Text> {movieRefresh2} </Text> 
+      </View>
+      </ScrollView>
     </View>
-    </ScrollView>
-    </View>
-        )
-      }
-        const styles = StyleSheet.create({
-            image: {
-              aspectRatio: 670/250
-            },
-            title: {
-              fontWeight: 'bold',
-              fontSize: 15
-            },
-            text: {
-              fontSize: 12,
-              flexWrap: 'wrap'
-            }
-          });
-
-
+  )
+}
+const styles = StyleSheet.create({
+  image: {
+    aspectRatio: 670/250
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 15
+  },
+  text: {
+    fontSize: 12,
+    flexWrap: 'wrap',
+    marginBottom: 20,
+  }
+});
