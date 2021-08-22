@@ -9,38 +9,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps'
 
-
 const App: () => Node = () => {
 
   const [staticData, setStaticdata] = useState ([]);
-
-  useEffect(() => {
-    storeData();
-  },[cities]); 
-
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); 
   const [modalVisible2, setModalVisible2] = useState(false); 
   const [cityName, setCityName] = useState(""); 
   const [cities, setCities] = useState([]);
-  const [lat, setLat] = useState(65.1695);
-  const [lon, setLon] = useState(24.9355);
+  const [lat, setLat] = useState(66.4945);
+  const [lon, setLon] = useState(25.7713);
 
   const [region, setRegion] = useState({
     latitude: 66.4945000,
-    longitude: 025.7713333,
+    longitude: 25.7713333,
     latitudeDelta: 0.04,
     longitudeDelta: 0.05,
   });
 
-
   const openDialog = () => {
     setModalVisible(true);
   }
-
   const cancelCity = () => {
     setModalVisible(false);
   }
-
   const cancelInfo = () => {
     setModalVisible2(false);
   }
@@ -72,9 +63,7 @@ const App: () => Node = () => {
     setLat(data.coord.lat);
     setLon(data.coord.lon);
 
-    return (
-      null
-    );
+   return (null);
   }
 
   const showOnMap = () => {
@@ -141,7 +130,6 @@ const App: () => Node = () => {
     </ScrollView>
     </View>
     </SafeAreaProvider>
-  );
 };
 
 export default App;
