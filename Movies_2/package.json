@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "17.0.2",
     "react-native": "^0.62.0",
+    "react-native-web-webview": "^1.0.2",
     "react-native-youtube": "^2.0.2"
   },
   "devDependencies": {
