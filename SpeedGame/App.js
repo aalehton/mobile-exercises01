@@ -84,14 +84,14 @@ const FirstRoute = () => (
   <View style={[styles.scene, { backgroundColor: '#013220', marginTop: 90 }]}>
   <Text style={styles.text}>Double tap the circle as fast as you can!</Text>
   <View style={styles.circle} onTouchStart={CirclePressed}/>
-  <Text style={paddingTop: 50, textAlign: "center"}>Time: {score}</Text> 
+  <Text style={{paddingTop: 50, textAlign: "center"}}>Time: {score}</Text> 
   <View style={styles.row}>
   <View style={styles.button}>
   <View style={{marginRight: 20, width: 150}}>
   <Button title="Add highscores" onPress={() => setAddDialogVisible(true)} />
   </View> 
   <View style={{width: 150}}>
-  <Button title="Reset time" onPress={() => setAddDialogVisible{true}} /> 
+  <Button title="Reset time" onPress={() => setAddDialogVisible(true)} /> 
   </View> 
   </View> 
   </View>
@@ -101,8 +101,8 @@ const FirstRoute = () => (
 
 
 const SecondRoute = () => (
-  <View style={[ styles.scene, { backgroundColor: '#3ab1b7' }]} />
-  <View style={[ styles.scene, { backgroundColor: '#3ab1b7' }]} />
+  <View style={[ styles.scene, { backgroundColor: '#3ab1b7' }]}>
+  <View style={[ styles.scene, { backgroundColor: '#3ab1b7' }]}>
   <ScrollView>
       {players.map((player, index) => {
         return (
