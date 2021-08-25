@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
-import MovieDetailScreen from './MovieDetailScreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+//import MovieDetailScreen from './MovieDetailScreen';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -12,60 +10,58 @@ import {
   Text,
   useColorScheme,
   View,
-  TouchableHighlight,
   Image,
+  TouchableHighlight,
 } from 'react-native';
 
 function MoviesList(props) {
 
   const [movies, setMovies] = useState([]); 
-
+ 
   useEffect(() => {
     axios
-      .get('https://api.themoviedb.org/3/movie/550?api_key=576c3137cd1a3bf64cd1e012a692f2b4')
+      .get('https://api.themoviedb.org/3/movie/now_playing?api_key=26eb649409084b73e4ebe5cb3d57bdde&append_to_response=videos')
       .then(response => {
-        // Here it will get the movie data
         console.log(response.data.results);
         setMovies(response.data.results);
       })
   }, [])
-      //If it doesn't find a movie, it will send "Loading, please wait" message
-      if (movies.length === 0) {
-        return(
-          <View style={{flex: 1, padding: 20}}>
-            <Text>Loading, please wait...</Text>
-          </View>
-        )
-      }
-      let movieItems = movies.map(function(movie,index){
-        return (
-          <TouchableHighlight onPress={_ => itemPressed(index)} 
-                    underlayColor="lightgray" key={index}>
-          <MovieListItem movie={movie} key={index}/>
-          </TouchableHighlight>
-        )
-      });
-    
-      const itemPressed = (index) => {
-        props.navigation.navigate(
-          'MovieDetails',
-          { movie: movies[index] });
-        }      
 
-      return (
-        <ScrollView>
-          {movieItems}
-        </ScrollView>
-      )
-    }
+  if (movies.length === 0) {
+    return(
+      <View style={{flex: 1, padding: 20}}>
+        <Text>Loading, please wait...</Text>
+      </View>
+    )
+  }
+  let movieItems = movies.map(function(movie,index){
+    return (
+      <TouchableHighlight onPress={_ => itemPressed(index)} underlayColor="lightgray" key={index}>
+        <MovieListItem movie={movie} key={index}/>
+      </TouchableHighlight>
+    )
+  });
 
+  const itemPressed = (index) => {
+  props.navigation.navigate(
+    'MovieDetails',
+    { movie: movies[index]});
+  }
+
+  return (
+    <ScrollView>
+      {movieItems}
+    </ScrollView>
+  )
+  
+}
 
 function MovieListItem(props) {
   let IMAGEPATH = 'http://image.tmdb.org/t/p/w500'
   let imageurl = IMAGEPATH + props.movie.poster_path;
 
-  return(
-<View style={styles.movieItem}>
+  return (
+    <View style={styles.movieItem}>
       <View style={styles.movieItemImage}>
         <Image source={{uri: imageurl}} style={{width: 99, height: 146}} />
       </View>
@@ -80,15 +76,14 @@ function MovieListItem(props) {
 
 const MovieListScreen: () => Node = ({ navigation }) => {
 
+
   return (
-    <SafeAreaProvider>
-      <StatusBar/>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
-          <MoviesList navigation={ navigation }/>
-          <MoviesList/>
+    <SafeAreaView>
+    <StatusBar/>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <MoviesList navigation={ navigation }/>
       </ScrollView>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 
